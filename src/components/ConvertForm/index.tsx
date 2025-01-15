@@ -1,12 +1,14 @@
 import { FC, useEffect, useState } from 'react';
 import Input from "../ui/Input";
 import Dropdown from "../ui/Dropdown";
-import { Box, CircularProgress } from "@mui/material";
+import {Box, CircularProgress, Typography} from "@mui/material";
 import useGetCurrencies from "../../hooks/useGetCurrencies.ts";
 
 const formatNumber = (num: number): string => {
     return num.toString();
 };
+
+
 
 const ConvertForm: FC = () => {
     const [convertFromValue, setConvertFromValue] = useState<string>("");
@@ -16,28 +18,22 @@ const ConvertForm: FC = () => {
     const [lastUpdatedField, setLastUpdatedField] = useState<'from' | 'to'>('from');
     const { currencyListLoading, currencies, error, conversionRates } = useGetCurrencies(convertFromCurrency);
 
+    const convertCurrency = (value: string, fromCurrency: string, toCurrency: string) => {
+        const numericValue = parseFloat(value);
+        if (isNaN(numericValue)) return "";
+
+        const baseAmount = numericValue / conversionRates[fromCurrency];
+        const convertedAmount = baseAmount * conversionRates[toCurrency];
+        return formatNumber(Number(convertedAmount.toFixed(2)));
+    };
+
     useEffect(() => {
         if (!conversionRates[convertToCurrency] || !conversionRates[convertFromCurrency]) return;
 
         if (lastUpdatedField === 'from' && convertFromValue !== '' && convertFromValue !== '.') {
-            const numericValue = parseFloat(convertFromValue);
-            if (isNaN(numericValue)) return;
-
-            const baseAmount = numericValue / conversionRates[convertFromCurrency];
-            const convertedAmount = baseAmount * conversionRates[convertToCurrency];
-
-            const roundedAmount = Number(convertedAmount.toFixed(2));
-            setConvertToValue(formatNumber(roundedAmount));
-
+            setConvertToValue(convertCurrency(convertFromValue, convertFromCurrency, convertToCurrency));
         } else if (lastUpdatedField === 'to' && convertToValue !== '' && convertToValue !== '.') {
-            const numericValue = parseFloat(convertToValue);
-            if (isNaN(numericValue)) return;
-
-            const baseAmount = numericValue / conversionRates[convertToCurrency];
-            const convertedAmount = baseAmount * conversionRates[convertFromCurrency];
-
-            const roundedAmount = Number(convertedAmount.toFixed(2));
-            setConvertFromValue(formatNumber(roundedAmount));
+            setConvertFromValue(convertCurrency(convertToValue, convertToCurrency, convertFromCurrency));
         }
     }, [convertFromValue, convertToValue, convertFromCurrency, convertToCurrency, conversionRates, lastUpdatedField]);
 
@@ -46,9 +42,9 @@ const ConvertForm: FC = () => {
             setConvertFromValue("");
             setConvertToValue("");
         } else {
-            setLastUpdatedField('from');
             setConvertFromValue(value.toString());
         }
+        setLastUpdatedField('from');
     };
 
     const handleConvertToValueChange = (value: string | number) => {
@@ -56,34 +52,29 @@ const ConvertForm: FC = () => {
             setConvertFromValue("");
             setConvertToValue("");
         } else {
-            setLastUpdatedField('to');
             setConvertToValue(value.toString());
         }
+        setLastUpdatedField('to');
     };
 
     const handleConvertFromCurrencyChange = (currency: string) => {
         setConvertFromCurrency(currency);
-
-        if (lastUpdatedField === 'to' && convertToValue) {
-            setLastUpdatedField('to');
-        }
+        setLastUpdatedField("from")
     };
 
     const handleConvertToCurrencyChange = (currency: string) => {
         setConvertToCurrency(currency);
-        if (lastUpdatedField === 'to' && convertToValue) {
-            setLastUpdatedField('to');
-        }
+        setLastUpdatedField("from")
     };
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <Typography variant="body2" color="error">{error}</Typography>}
                 <Box sx={{ display: "flex", gap: 4, width: 600 }}>
                     <Input value={convertFromValue} onChange={handleConvertFromValueChange} placeholder="Enter amount" />
                     {
                         currencyListLoading ?
-                        <CircularProgress size={24}/> :
+                        <CircularProgress size={24} sx={{marginTop: 2}}/> :
                         <Dropdown currenciesList={currencies} currentCurrency={convertFromCurrency} onChange={handleConvertFromCurrencyChange}/>
                     }
                 </Box>
@@ -91,7 +82,7 @@ const ConvertForm: FC = () => {
                     <Input value={convertToValue} onChange={handleConvertToValueChange} placeholder="Converted amount" />
                     {
                         currencyListLoading ?
-                            <CircularProgress size={24}/> :
+                            <CircularProgress size={24} sx={{marginTop: 2}}/> :
                             <Dropdown currenciesList={currencies} currentCurrency={convertToCurrency} onChange={handleConvertToCurrencyChange} />
                     }
                 </Box>

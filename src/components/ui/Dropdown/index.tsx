@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import { MenuItem, Select} from "@mui/material";
+import {FormControl, MenuItem, Select} from "@mui/material";
 
 interface Props {
     currenciesList: string[];
@@ -9,6 +9,7 @@ interface Props {
 
 const Dropdown:FC<Props> = ({currenciesList, currentCurrency, onChange}) => {
     return (
+        <FormControl fullWidth>
             <Select
                 value={currentCurrency}
                 onChange={(e) => onChange(e.target.value)}
@@ -29,6 +30,7 @@ const Dropdown:FC<Props> = ({currenciesList, currentCurrency, onChange}) => {
                     </MenuItem>
                 ))}
             </Select>
+        </FormControl>
     );
 };
 
