@@ -8,8 +8,6 @@ const formatNumber = (num: number): string => {
     return num.toString();
 };
 
-
-
 const ConvertForm: FC = () => {
     const [convertFromValue, setConvertFromValue] = useState<string>("");
     const [convertFromCurrency, setConvertFromCurrency] = useState<string>("UAH");
@@ -68,9 +66,9 @@ const ConvertForm: FC = () => {
     };
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 4, maxWidth: 600, width: "100%" }}>
             {error && <Typography variant="body2" color="error">{error}</Typography>}
-                <Box sx={{ display: "flex", gap: 4, width: 600 }}>
+                <Box sx={{ display: "flex", gap: 4, width: "100%" }}>
                     <Input value={convertFromValue} onChange={handleConvertFromValueChange} placeholder="Enter amount" />
                     {
                         currencyListLoading ?
@@ -78,7 +76,7 @@ const ConvertForm: FC = () => {
                         <Dropdown currenciesList={currencies} currentCurrency={convertFromCurrency} onChange={handleConvertFromCurrencyChange}/>
                     }
                 </Box>
-                <Box sx={{ display: "flex", gap: 4, width: 600 }}>
+                <Box sx={{ display: "flex", gap: 4, width: "100%" }}>
                     <Input value={convertToValue} onChange={handleConvertToValueChange} placeholder="Converted amount" />
                     {
                         currencyListLoading ?

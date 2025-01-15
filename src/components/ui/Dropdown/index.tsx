@@ -14,6 +14,7 @@ const Dropdown:FC<Props> = ({currenciesList, currentCurrency, onChange}) => {
                 value={currentCurrency}
                 onChange={(e) => onChange(e.target.value)}
                 variant={"outlined"}
+                sx={{maxWidth: 150}}
                 MenuProps={{
                     PaperProps: {
                         sx: {
