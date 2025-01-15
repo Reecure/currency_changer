@@ -13,7 +13,14 @@ const Dropdown:FC<Props> = ({currenciesList, currentCurrency, onChange}) => {
                 value={currentCurrency}
                 onChange={(e) => onChange(e.target.value)}
                 variant={"outlined"}
-                sx={{maxHeight: 200}}
+                MenuProps={{
+                    PaperProps: {
+                        sx: {
+                            maxHeight: 200,
+                            overflow: 'auto',
+                        },
+                    },
+                }}
                 fullWidth
             >
                 {currenciesList.map((currency) => (

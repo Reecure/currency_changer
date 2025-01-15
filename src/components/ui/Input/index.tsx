@@ -13,8 +13,18 @@ const Input:FC<Props> = ({onChange, placeholder, value, disabled = false}) => {
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value;
 
-        onChange(isNaN(Number(inputValue)) ? inputValue : Number(inputValue));
+        if (inputValue === '') {
+            onChange('');
+            return;
+        }
+
+        const numberRegex = /^\d*\.?\d{0,100}$|^\d+\.$/;
+
+        if (numberRegex.test(inputValue)) {
+            onChange(inputValue);
+        }
     };
+
 
     return (
         <TextField
