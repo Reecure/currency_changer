@@ -9,12 +9,13 @@ interface Props {
 
 const Dropdown:FC<Props> = ({currenciesList, currentCurrency, onChange}) => {
     return (
-        <FormControl fullWidth>
+        <FormControl
+            sx={{maxWidth: 150, width: "100%"}}
+        >
             <Select
                 value={currentCurrency}
                 onChange={(e) => onChange(e.target.value)}
                 variant={"outlined"}
-                sx={{maxWidth: 150}}
                 MenuProps={{
                     PaperProps: {
                         sx: {

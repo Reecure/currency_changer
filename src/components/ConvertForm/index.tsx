@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import Input from "../ui/Input";
 import Dropdown from "../ui/Dropdown";
-import {Box, CircularProgress, Typography} from "@mui/material";
+import {Box, CircularProgress, Stack, Typography} from "@mui/material";
 import useGetCurrencies from "../../hooks/useGetCurrencies.ts";
 
 const formatNumber = (num: number): string => {
@@ -66,7 +66,7 @@ const ConvertForm: FC = () => {
     };
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 4, maxWidth: 600, width: "100%" }}>
+        <Stack direction={"column"} spacing={4} sx={{ maxWidth: 600, width: "100%" }}>
             {error && <Typography variant="body2" color="error">{error}</Typography>}
                 <Box sx={{ display: "flex", gap: 4, width: "100%" }}>
                     <Input value={convertFromValue} onChange={handleConvertFromValueChange} placeholder="Enter amount" />
@@ -84,7 +84,7 @@ const ConvertForm: FC = () => {
                             <Dropdown currenciesList={currencies} currentCurrency={convertToCurrency} onChange={handleConvertToCurrencyChange} />
                     }
                 </Box>
-        </Box>
+        </Stack>
     );
 }
 
