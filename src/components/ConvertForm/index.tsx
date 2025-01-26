@@ -23,6 +23,7 @@ const ConvertForm: FC = () => {
         const baseAmount = numericValue / conversionRates[fromCurrency];
         const convertedAmount = baseAmount * conversionRates[toCurrency];
         return formatNumber(Number(convertedAmount.toFixed(2)));
+        console.log('test');
     };
 
     useEffect(() => {
